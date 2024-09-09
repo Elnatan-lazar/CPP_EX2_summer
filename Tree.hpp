@@ -114,6 +114,201 @@ public:
         }
     }
 
+    typename std::vector<Node<T> *>::iterator begin_bfs_scan()
+    {
+        bfs_nodes.clear(); // Clear previous results
+
+        if (root == nullptr)
+        {
+            return bfs_nodes.end(); // Return end iterator if root is null
+        }
+
+        std::queue<const Node<T> *> q;
+        q.push(root);
+
+        while (!q.empty())
+        {
+            const Node<T> *current = q.front(); // Get the front node
+            q.pop();                            // Remove the front node
+
+            // Add the current node to the result vector
+            bfs_nodes.push_back(const_cast<Node<T> *>(current));
+
+            // Push all children of the current node into the queue
+            for (const auto &child : current->get_children())
+            {
+                q.push(child); // Assuming get_children() returns a collection of Node<T>* pointers
+            }
+        }
+
+        return bfs_nodes.begin(); // Return iterator to the first element
+    }
+
+    typename std::vector<Node<T> *>::iterator end_bfs_scan()
+    {
+        bfs_nodes.clear(); // Clear previous results
+
+        if (root == nullptr)
+        {
+            return bfs_nodes.end(); // Return end iterator if root is null
+        }
+
+        std::queue<const Node<T> *> q;
+        q.push(root);
+
+        while (!q.empty())
+        {
+            const Node<T> *current = q.front(); // Get the front node
+            q.pop();                            // Remove the front node
+
+            // Add the current node to the result vector
+            bfs_nodes.push_back(const_cast<Node<T> *>(current));
+
+            // Push all children of the current node into the queue
+            for (const auto &child : current->get_children())
+            {
+                q.push(child); // Assuming get_children() returns a collection of Node<T>* pointers
+            }
+        }
+
+        return bfs_nodes.end(); // Return iterator to the first element
+    }
+
+    typename std::vector<Node<T> *>::iterator begin_dfs_scan()
+    {
+        dfs_nodes.clear(); // Clear previous results
+
+        if (root == nullptr)
+        {
+            return dfs_nodes.end(); // Return end iterator if root is null
+        }
+
+        std::stack<const Node<T> *> s;
+        s.push(root);
+
+        while (!s.empty())
+        {
+            const Node<T> *current = s.top(); // Get the top node (LIFO)
+            s.pop();                          // Remove the top node
+
+            // Add the current node to the result vector
+            dfs_nodes.push_back(const_cast<Node<T> *>(current));
+
+            // Push all children of the current node into the stack
+            // Reverse the order of children if you want to maintain left-to-right traversal
+            const auto &children = current->get_children();
+            for (auto it = children.rbegin(); it != children.rend(); ++it)
+            {
+                s.push(*it); // Assuming get_children() returns Node<T>* pointers
+            }
+        }
+
+        return dfs_nodes.begin(); // Return iterator to the first element
+    }
+
+    typename std::vector<Node<T> *>::iterator end_dfs_scan()
+    {
+        dfs_nodes.clear(); // Clear previous results
+
+        if (root == nullptr)
+        {
+            return dfs_nodes.end(); // Return end iterator if root is null
+        }
+
+        std::stack<const Node<T> *> s;
+        s.push(root);
+
+        while (!s.empty())
+        {
+            const Node<T> *current = s.top(); // Get the top node (LIFO)
+            s.pop();                          // Remove the top node
+
+            // Add the current node to the result vector
+            dfs_nodes.push_back(const_cast<Node<T> *>(current));
+
+            // Push all children of the current node into the stack
+            // Reverse the order of children if you want to maintain left-to-right traversal
+            const auto &children = current->get_children();
+            for (auto it = children.rbegin(); it != children.rend(); ++it)
+            {
+                s.push(*it); // Assuming get_children() returns Node<T>* pointers
+            }
+        }
+
+        return dfs_nodes.end(); // Return iterator to the first element
+    }
+
+    typename std::vector<Node<T> *>::iterator begin_pre_order()
+    {
+        pre_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        pre_order_help(root);
+        return pre_order_nodes.begin();
+    }
+
+    typename std::vector<Node<T> *>::iterator end_pre_order()
+    {
+        pre_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        pre_order_help(root);
+        return pre_order_nodes.end();
+    }
+
+    void pre_order_help(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        pre_order_nodes.push_back(node);
+        for (auto child : node->get_children())
+        {
+            pre_order_help(child, result); // Recursively visit each child
+        }
+    }
+
+    typename std::vector<Node<T> *>::iterator begin_post_order()
+    {
+        post_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        post_order_help(root);
+        return post_order_nodes.begin();
+    }
+
+    typename std::vector<Node<T> *>::iterator end_post_order()
+    {
+        post_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        post_order_help(root);
+        return post_order_nodes.end();
+    }
+
+    void post_order_help(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+
+        for (auto child : node->get_children())
+        {
+            post_order_help(child, result); // Recursively visit each child
+        }
+        post_order_nodes.push_back(node);
+    }
+
     void add_sub_node(const Node<T> &parent, const Node<T> &child)
     {
         try
@@ -146,6 +341,104 @@ public:
             // Handle the specific exception type (invalid_argument)
             std::cerr << "Error: " << e.what() << std::endl;
         }
+    }
+
+    typename std::vector<Node<T> *>::iterator begin_in_order()
+    {
+        in_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        in_order_help(root);
+        return in_order_nodes.begin();
+    }
+
+    typename std::vector<Node<T> *>::iterator end_in_order()
+    {
+        in_order_nodes.clear;
+        if (!is_binary_tree)
+        {
+            return dfs();
+        }
+        in_order_help(root);
+        return in_order_nodes.end();
+    }
+
+    void in_order_help(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        switch (node->get_children().size())
+        {
+        case (0):
+            in_order_nodes.push_back(node);
+            break;
+        case (1):
+            in_order_nodes.push_back(node->get_children()[0]);
+            in_order_nodes.push_back(node);
+        default:
+            in_order_nodes.push_back(node->get_children()[0]);
+            in_order_nodes.push_back(node);
+            in_order_nodes.push_back(node->get_children()[1]);
+            break;
+        }
+    }
+
+    typename std::vector<Node<T> *>::iterator end_heap()
+    {
+        heap_nodes.clear();
+        myHeap();
+        return heap_nodes.end();
+    }
+
+    typename std::vector<Node<T> *>::iterator begin_heap()
+    {
+        heap_nodes.clear();
+        myHeap(root);
+        return heap_nodes.begin();
+    }
+
+    void myHeap(Node<T> *node)
+    {
+        if (node == nullptr)
+            return;
+        myHead_helper(); // Use DFS to populate the result vector
+        auto comp = [](Node<T> *L, Node<T> *R)
+        { return L->get_value() > R->get_value(); };
+        std::make_heap(heap_nodes.begin(), heap_nodes.end(), comp); // Create a heap from the result vector
+    }
+
+    typename std::vector<Node<T> *>::iterator myHead_helper()
+    {
+        heap_nodes.clear(); // Clear previous results
+
+        if (root == nullptr)
+        {
+            return heap_nodes.end(); // Return end iterator if root is null
+        }
+
+        std::queue<const Node<T> *> q;
+        q.push(root);
+
+        while (!q.empty())
+        {
+            const Node<T> *current = q.front(); // Get the front node
+            q.pop();                            // Remove the front node
+
+            // Add the current node to the result vector
+            heap_nodes.push_back(const_cast<Node<T> *>(current));
+
+            // Push all children of the current node into the queue
+            for (const auto &child : current->get_children())
+            {
+                q.push(child); // Assuming get_children() returns a collection of Node<T>* pointers
+            }
+        }
+
+        return heap_nodes.begin(); // Return iterator to the first element
     }
 
     /**
