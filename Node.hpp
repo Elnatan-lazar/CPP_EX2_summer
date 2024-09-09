@@ -1,4 +1,4 @@
-// Node.hpp
+// mail:elnatan100@gmail.com
 #ifndef NODE_HPP
 #define NODE_HPP
 

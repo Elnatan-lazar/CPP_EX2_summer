@@ -1,3 +1,4 @@
+
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -I.
 GUIFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
