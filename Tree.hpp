@@ -5,6 +5,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <queue>
+#include <stack>
 #include <cmath>
 #include <stdexcept>
 #include <iostream>
@@ -30,12 +31,12 @@ class Tree
 private:
     Node<T> *root; // The root node of the tree.
     bool is_binary_tree;
-    std::vector<Node<T> *> pre_order_nodes;  // Nodes in pre-order traversal.
-    std::vector<Node<T> *> post_order_nodes; // Nodes in post-order traversal.
-    std::vector<Node<T> *> in_order_nodes;   // Nodes in in-order traversal.
-    std::vector<Node<T> *> bfs_nodes;        // Nodes in breadth-first traversal.
-    std::vector<Node<T> *> dfs_nodes;        // Nodes in depth-first traversal.
-    std::vector<Node<T> *> heap_nodes;       // Nodes sorted in heap order.
+    vector<Node<T> *> pre_order_nodes;  // Nodes in pre-order traversal.
+    vector<Node<T> *> post_order_nodes; // Nodes in post-order traversal.
+    vector<Node<T> *> in_order_nodes;   // Nodes in in-order traversal.
+    vector<Node<T> *> bfs_nodes;        // Nodes in breadth-first traversal.
+    vector<Node<T> *> dfs_nodes;        // Nodes in depth-first traversal.
+    vector<Node<T> *> heap_nodes;       // Nodes sorted in heap order.
 
     /**
      * @brief Helper function to recursively delete nodes in the tree.
@@ -114,7 +115,7 @@ public:
         }
     }
 
-    typename std::vector<Node<T> *>::iterator begin_bfs_scan()
+    typename vector<Node<T> *>::iterator begin_bfs_scan()
     {
         bfs_nodes.clear(); // Clear previous results
 
@@ -123,7 +124,7 @@ public:
             return bfs_nodes.end(); // Return end iterator if root is null
         }
 
-        std::queue<const Node<T> *> q;
+        queue<const Node<T> *> q;
         q.push(root);
 
         while (!q.empty())
@@ -144,7 +145,7 @@ public:
         return bfs_nodes.begin(); // Return iterator to the first element
     }
 
-    typename std::vector<Node<T> *>::iterator end_bfs_scan()
+    typename vector<Node<T> *>::iterator end_bfs_scan()
     {
         bfs_nodes.clear(); // Clear previous results
 
@@ -153,7 +154,7 @@ public:
             return bfs_nodes.end(); // Return end iterator if root is null
         }
 
-        std::queue<const Node<T> *> q;
+        queue<const Node<T> *> q;
         q.push(root);
 
         while (!q.empty())
@@ -174,7 +175,7 @@ public:
         return bfs_nodes.end(); // Return iterator to the first element
     }
 
-    typename std::vector<Node<T> *>::iterator begin_dfs_scan()
+    typename vector<Node<T> *>::iterator begin_dfs_scan()
     {
         dfs_nodes.clear(); // Clear previous results
 
@@ -183,7 +184,7 @@ public:
             return dfs_nodes.end(); // Return end iterator if root is null
         }
 
-        std::stack<const Node<T> *> s;
+        stack<const Node<T> *> s;
         s.push(root);
 
         while (!s.empty())
@@ -206,7 +207,7 @@ public:
         return dfs_nodes.begin(); // Return iterator to the first element
     }
 
-    typename std::vector<Node<T> *>::iterator end_dfs_scan()
+    typename vector<Node<T> *>::iterator end_dfs_scan()
     {
         dfs_nodes.clear(); // Clear previous results
 
@@ -215,7 +216,7 @@ public:
             return dfs_nodes.end(); // Return end iterator if root is null
         }
 
-        std::stack<const Node<T> *> s;
+        stack<const Node<T> *> s;
         s.push(root);
 
         while (!s.empty())
@@ -238,23 +239,23 @@ public:
         return dfs_nodes.end(); // Return iterator to the first element
     }
 
-    typename std::vector<Node<T> *>::iterator begin_pre_order()
+    typename vector<Node<T> *>::iterator begin_pre_order()
     {
-        pre_order_nodes.clear;
+        pre_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return begin_dfs_scan();
         }
         pre_order_help(root);
         return pre_order_nodes.begin();
     }
 
-    typename std::vector<Node<T> *>::iterator end_pre_order()
+    typename vector<Node<T> *>::iterator end_pre_order()
     {
-        pre_order_nodes.clear;
+        pre_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return end_dfs_scan();
         }
         pre_order_help(root);
         return pre_order_nodes.end();
@@ -269,27 +270,27 @@ public:
         pre_order_nodes.push_back(node);
         for (auto child : node->get_children())
         {
-            pre_order_help(child, result); // Recursively visit each child
+            pre_order_help(child); // Recursively visit each child
         }
     }
 
-    typename std::vector<Node<T> *>::iterator begin_post_order()
+    typename vector<Node<T> *>::iterator begin_post_order()
     {
-        post_order_nodes.clear;
+        post_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return begin_dfs_scan();
         }
         post_order_help(root);
         return post_order_nodes.begin();
     }
 
-    typename std::vector<Node<T> *>::iterator end_post_order()
+    typename vector<Node<T> *>::iterator end_post_order()
     {
-        post_order_nodes.clear;
+        post_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return end_dfs_scan();
         }
         post_order_help(root);
         return post_order_nodes.end();
@@ -304,7 +305,7 @@ public:
 
         for (auto child : node->get_children())
         {
-            post_order_help(child, result); // Recursively visit each child
+            post_order_help(child); // Recursively visit each child
         }
         post_order_nodes.push_back(node);
     }
@@ -316,50 +317,50 @@ public:
             if (root == nullptr)
             {
                 // Throw an exception if parent is null
-                throw std::invalid_argument("tree is empty, add root first");
+                throw invalid_argument("tree is empty, add root first");
             }
             Node<T> *parent_ptr = find_node(root, parent.get_value());
 
             // check if the parent in the tree
             if (parent_ptr == nullptr)
             {
-                throw std::invalid_argument("the parent not it the tree");
+                throw invalid_argument("the parent not it the tree");
             }
 
             // Check if the parent node has reached the maximum number of children
             if (parent_ptr->get_num_childern() >= K)
             {
                 // Throw an exception if the maximum number of children is exceeded
-                throw std::invalid_argument("Cannot add more children to this node");
+                throw invalid_argument("Cannot add more children to this node");
             }
 
             // Add the child node to the parent node's list of children
             parent_ptr->add_child(child);
         }
-        catch (const std::invalid_argument &e)
+        catch (const invalid_argument &e)
         {
             // Handle the specific exception type (invalid_argument)
-            std::cerr << "Error: " << e.what() << std::endl;
+            cerr << "Error: " << e.what() << endl;
         }
     }
 
-    typename std::vector<Node<T> *>::iterator begin_in_order()
+    typename vector<Node<T> *>::iterator begin_in_order()
     {
-        in_order_nodes.clear;
+        in_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return begin_dfs_scan();
         }
         in_order_help(root);
         return in_order_nodes.begin();
     }
 
-    typename std::vector<Node<T> *>::iterator end_in_order()
+    typename vector<Node<T> *>::iterator end_in_order()
     {
-        in_order_nodes.clear;
+        in_order_nodes.clear();
         if (!is_binary_tree)
         {
-            return dfs();
+            return end_dfs_scan();
         }
         in_order_help(root);
         return in_order_nodes.end();
@@ -377,24 +378,25 @@ public:
             in_order_nodes.push_back(node);
             break;
         case (1):
-            in_order_nodes.push_back(node->get_children()[0]);
+            in_order_help(node->get_children()[0]);
             in_order_nodes.push_back(node);
+            break;
         default:
-            in_order_nodes.push_back(node->get_children()[0]);
+            in_order_help(node->get_children()[0]);
             in_order_nodes.push_back(node);
-            in_order_nodes.push_back(node->get_children()[1]);
+            in_order_help(node->get_children()[1]);
             break;
         }
     }
 
-    typename std::vector<Node<T> *>::iterator end_heap()
+    typename vector<Node<T> *>::iterator end_heap()
     {
         heap_nodes.clear();
-        myHeap();
+        myHeap(root);
         return heap_nodes.end();
     }
 
-    typename std::vector<Node<T> *>::iterator begin_heap()
+    typename vector<Node<T> *>::iterator begin_heap()
     {
         heap_nodes.clear();
         myHeap(root);
@@ -408,10 +410,10 @@ public:
         myHead_helper(); // Use DFS to populate the result vector
         auto comp = [](Node<T> *L, Node<T> *R)
         { return L->get_value() > R->get_value(); };
-        std::make_heap(heap_nodes.begin(), heap_nodes.end(), comp); // Create a heap from the result vector
+        make_heap(heap_nodes.begin(), heap_nodes.end(), comp); // Create a heap from the result vector
     }
 
-    typename std::vector<Node<T> *>::iterator myHead_helper()
+    typename vector<Node<T> *>::iterator myHead_helper()
     {
         heap_nodes.clear(); // Clear previous results
 
@@ -420,7 +422,7 @@ public:
             return heap_nodes.end(); // Return end iterator if root is null
         }
 
-        std::queue<const Node<T> *> q;
+        queue<const Node<T> *> q;
         q.push(root);
 
         while (!q.empty())
@@ -454,21 +456,21 @@ public:
      */
 
     // cout operator
-    friend std::ostream &operator<<(std::ostream &os, Tree<T, K> &tree)
+    friend ostream &operator<<(ostream &os, Tree<T, K> &tree)
     {
         Node<T> *root = tree.getRoot();
 
         if (root == nullptr)
         {
-            os << "Error: Tree is empty." << std::endl;
+            os << "Error: Tree is empty." << endl;
             return os;
         }
-        os << "Generate GUI..." << std::endl;
+        os << "Generate GUI..." << endl;
 
         sf::Font font;
         if (!font.loadFromFile("ALBAS.TTF"))
         {
-            std::cerr << "Failed to load font file " << std::endl;
+            cerr << "Failed to load font file " << endl;
             return os;
         }
         sf::RenderWindow window(sf::VideoMode(800, 800), "**********MY_TREE**********");
@@ -496,7 +498,7 @@ public:
             return;
 
         // Create a map to store positions of each node
-        std::map<Node<T> *, sf::Vector2f> positions;
+        map<Node<T> *, sf::Vector2f> positions;
         float start_x = window.getSize().x / 2;
         float start_y = NODE_RADIUS * 2;
         float horizontal_spacing = window.getSize().x / 2.5; // Increased horizontal spacing
@@ -508,7 +510,7 @@ public:
         }
     }
 
-    void calculate_positions(Node<T> *node, std::map<Node<T> *, sf::Vector2f> &positions, float x, float y, float horizontal_spacing)
+    void calculate_positions(Node<T> *node, map<Node<T> *, sf::Vector2f> &positions, float x, float y, float horizontal_spacing)
     {
         if (node == nullptr)
             return;
@@ -524,7 +526,7 @@ public:
         }
     }
 
-    void draw_node(sf::RenderWindow &window, Node<T> *node, sf::Vector2f position, sf::Font &font, const std::map<Node<T> *, sf::Vector2f> &positions)
+    void draw_node(sf::RenderWindow &window, Node<T> *node, sf::Vector2f position, sf::Font &font, const map<Node<T> *, sf::Vector2f> &positions)
     {
         sf::CircleShape circle(NODE_RADIUS);
         circle.setFillColor(sf::Color::Green);
@@ -533,14 +535,14 @@ public:
 
         sf::Text text;
         text.setFont(font);
-        if constexpr (std::is_same<T, std::string>::value)
+        if constexpr (is_same<T, string>::value)
         {
             text.setString(node->get_value());
         }
         else
         {
-            std::ostringstream oss;
-            oss << std::fixed << std::setprecision(1) << node->get_value();
+            ostringstream oss;
+            oss << fixed << setprecision(1) << node->get_value();
             text.setString(oss.str());
         }
         text.setCharacterSize(25);
