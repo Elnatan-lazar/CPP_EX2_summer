@@ -1,38 +1,44 @@
-# עצים - STL, Templates, and Iterators
-עץ הוא גרף קשיר ללא מעגלים. באלגוריתמים 1 למדתם על אלגוריתמים לסריקה של גרף (כמו BFS ו-DFS).
-במטלה הזאת אתם תממשו קונטיינר המייצג עץ k-ארי (עץ k-ארי הוא עץ שבו לכל קודקוד יש לכל היותר k ילדים. למשל, עץ בינארי הוא עץ 2-ארי.) גנרי שמכיל מפתחות מכל סוג (למשל מספרים, מחרוזות ומחלקות). 
-המצב הדיפולטיבי של העץ הוא עץ בינארי (כלומר k=2). בשלב היצירה של הקונטיינר עליכם יהיה לציין את הסוג של המפתחות שהוא מכיל ואת מספר הילדים המקסימלי שיכול להיות לכל קודקוד. אם המספר הזה לא צוין, העץ יהיה עץ בינארי.
-עליכם לממש את האיטרטורים הבאים:
-1. איטרטור Pre-Order - איטרטור הסורק את העץ בצורה הבאה: צומת נוכחית -> תת עץ שמאלי -> תת עץ ימני (האיטרטור הזה עובד בצורה הזאת עבור עץ בינארי בלבד! עבור עץ כללי החזירו סריקת DFS רגילה שמתחילה מהשורש של העץ).
-2. איטרטור Post-Order - איטרטור הסורק את העץ בצורה הבאה: תת עץ שמאלי -> תת עץ ימני -> צומת נוכחית (האיטרטור הזה עובד בצורה הזאת עבור עץ בינארי בלבד! עבור עץ כללי החזירו סריקת DFS רגילה שמתחילה מהשורש של העץ).
-3. איטרטור In-Order  - איטרטור הסורק את העץ בצורה הבאה: תת עץ שמאלי -> צומת נוכחית -> תת עץ ימני (האיטרטור הזה עובד בצורה הזאת עבור עץ בינארי בלבד! עבור עץ כללי החזירו סריקת DFS רגילה שמתחילה מהשורש של העץ).
-5. איטרטור BFS - סריקת העץ לרוחב (משמאלי לימין) (עובד על עץ כללי).
-6. איטרטור DFS - סריקת העץ בעזרת אלגוריתם DFS (עובד על עץ כללי).
-7. איטרטור Heap - הפיכת עץ בינארי לערימת מינימום, לקריאה נוספת: https://he.wikipedia.org/wiki/%D7%A2%D7%A8%D7%99%D7%9E%D7%94_%D7%91%D7%99%D7%A0%D7%90%D7%A8%D7%99%D7%AA (פה אתם יכולים באלגוריתמים של הספרייה התקנית).
+This project focuses on generic programming, iterators, and utilizing the STL library.
 
-שם הקונטיינר צריך להיות `tree`. יש להגדיר את המתודות הבאות:
-1. המתודה `add_root` - הוספת השורש של העץ. המתודה מקבלת צומת כלשהו ושמה אותו בשורש העץ.
-2. המתודה `add_sub_node` - הוספת ילד לאב. המתודה מקבלת צומת בעץ וצומת כלשהו ויוצרת בן עבור אותו צומת.
-3. המתודות `begin_pre_order`, `end_pre_order`. המתודות מחזירות איטרטורים לצורך מעבור על העץ בשיטת Pre-Order.
-4. המתודות `begin_post_order`, `end_post_order`. המתודות מחזירות איטרטורים לצורך מעבור על העץ בשיטת Post-Order.
-5. המתודות `begin_in_order`, `end_in_order`. המתודות מחזירות איטרטורים לצורך מעבור על העץ בשיטת In-Order.
-6. המתודות `begin_bfs_scan`, `end_bfs_scan`. המתודות מחזירות איטרטורים לצורך מעבור על העץ בעזרת האלגוריתם BFS.
-7. המתודות `begin_dfs_scan`, `end_dfs_scan`. המתודות מחזירות איטרטורים לצורך מעבור על העץ בעזרת האלגוריתם DFS.
-8. המתודה `myHeap`. המתודה הופכת עץ בינארי לערימת מינימום וחזירה איטרטורים עבור הערימה שהתקבלה.
-9. יש לממש מפרק (Destructor) המוחק את כל העץ.
-10. פונקציית הדפסה. ההדפסה תתבצע בעזרת GUI. עליכם ליצור ממשק שמדפיס את העץ על המסך בצורה הגיוניות לשיקולכם.
+A tree is a connected graph without cycles. In this project, I implemented a container representing a k-ary tree (a k-ary tree is one where each node has at most k children. For example, a binary tree is a 2-ary tree). The tree is generic and can contain keys of any type (e.g., numbers, strings, or classes). By default, the tree is binary (meaning k=2). When creating the container, you can specify the key type and the tree's maximum number of children.
 
-יש לכתוב קובץ main שבו אתם מדגימים את אופן פעולת התוכנית. עליכם לכתוב מחלקה בשם Complex (המייצגת מספרים מדומים) ולהשתמש גם בה כדי להדגים את הקוד שלכם. (למדתם על המחלקה הזאת בתרגולים).
+the basic class Node conaina a templet of a that conatin value and children. 
 
-בנוסף, עליכם לכתוב בדיקות מקיפות לקוד שלכם.
+The following iterators are implemented in Tree class:
 
-כדי להשתמש ב-GUI אתם יכולים להיעזר בספרייה הבאה: https://wiki.qt.io/Qt_for_Beginners ובמדריך: https://www.youtube.com/watch?v=cXojtB8vS2E. כמובן שאתם יכולים להשתמש בכל ספרייה שאתם רוצים.
+Pre-Order Iterator: Traverses the tree in this order: current node -> left subtree -> right subtree. (This iterator operates in this manner only for binary trees; for a general tree, it returns a standard DFS traversal starting from the root.)
 
-יש להוסיף קובץ Makefile כאשר הפקודה `make tree` מריצה את התוכנית הראשית שלכם. עליכם להגיש קובץ `README` המסביר את ההיררכיה של המחלקות ובאילו ספריות השתמשתם.
-כמו כן, עליכם לכתוב בתחילת כל קובץ את המייל שלכם. אי עמידה בהנחיות תגרור הפחתה בציון.
+Post-Order Iterator: Traverses the tree in this order: left subtree -> right subtree -> current node. (This iterator also works this way only for binary trees; for general trees, it performs a standard DFS starting from the root.)
+
+In-Order Iterator: Traverses in the order of left subtree -> current node -> right subtree. (This traversal is specific to binary trees; for general trees, it returns a standard DFS traversal beginning at the root.)
+
+BFS Iterator: Traverses the tree level by level (left to right). This iterator works for general trees.
+
+DFS Iterator: Performs a depth-first search (DFS) on the tree. This iterator is suitable for general trees.
+
+Heap Iterator: Converts a binary tree into a min-heap (using the standard algorithm library from the STL).
+
+The Tree class includes the following methods:
+
+add_root: Adds a root to the tree. This method accepts a node of any type and places it as the root of the tree.
+
+add_sub_node: Adds a child to a given parent node. It takes a node within the tree and a new node to create a child for the specified parent.
+
+begin_pre_order, end_pre_order: Return iterators for traversing the tree in pre-order.
+
+begin_post_order, end_post_order: Return iterators for traversing the tree in post-order.
+
+begin_in_order, `end
 
 
-שימו לב שהגשת הפרויקט היא אישית. מותר להתייעץ, לקבל עזרה, ולהשתמש באינטרנט אבל יש לדווח בכתב על כל עזרה שקיבלתם, בהתאם לתקנון היושר של המחלקה - https://www.ariel.ac.il/wp/cs/wp-content/uploads/sites/88/2020/08/Guidelines-for-Academic-Integrity.pdf.
+commands:
 
-בהצלחה!
-   
+Make tree comdand will run the Demo file
+Make test will create the test
+the exe file are in the project so the command ./Demo or ./test will run them.
+
+Gui
+![gui](https://github.com/user-attachments/assets/635c70a1-ab09-4666-af44-c7cf4d11e991)
+
+leak check
+![341111319-16f8fbf0-fce1-4644-b1a6-20b494ac0ebf](https://github.com/user-attachments/assets/8282a882-b44d-4425-b1d3-893ef0568786)
