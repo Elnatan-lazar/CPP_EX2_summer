@@ -3,7 +3,6 @@
 #define Tree_HPP
 #include "Node.hpp"
 #include <vector>
-#include <SFML/Graphics.hpp>
 #include <queue>
 #include <stack>
 #include <cmath>
@@ -30,13 +29,60 @@ class Tree
 {
 private:
     Node<T> *root; // The root node of the tree.
-    bool is_binary_tree;
+    bool binary_tree_bool;
     vector<Node<T> *> pre_order_nodes;  // Nodes in pre-order traversal.
     vector<Node<T> *> post_order_nodes; // Nodes in post-order traversal.
     vector<Node<T> *> in_order_nodes;   // Nodes in in-order traversal.
     vector<Node<T> *> bfs_nodes;        // Nodes in breadth-first traversal.
     vector<Node<T> *> dfs_nodes;        // Nodes in depth-first traversal.
     vector<Node<T> *> heap_nodes;       // Nodes sorted in heap order.
+
+public:
+    /**
+     * Default constructor
+     * Initializes the tree as a binary tree (K=2 by default).
+     */
+    Tree() : root(nullptr), binary_tree_bool(K == 2) {}
+    /**
+     * Destructor
+     */
+    ~Tree()
+    {
+        delete_tree(root);
+    }
+    /**
+     * @brief Helper function to recursively delete nodes in the tree.
+     * @param node The current node to delete.
+     *
+     * This function recursively deletes all children of a node and then deletes the node itself.
+     */
+
+    /**
+     * Add a root node to the tree.
+     **/
+    void add_root(const Node<T> &node)
+    {
+        try
+        {
+            if (root != nullptr)
+            {
+                throw runtime_error("Root node already exists.");
+            }
+            root = new Node<T>(node.get_value());
+        }
+        catch (const invalid_argument &e)
+        {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+
+    /**
+     * Get the root node of the tree.
+     */
+    Node<T> *getRoot() const
+    {
+        return root;
+    }
 
     /**
      * @brief Helper function to recursively delete nodes in the tree.
@@ -74,45 +120,6 @@ private:
                 return found;
         }
         return nullptr; // Return nullptr if the value is not found
-    }
-
-public:
-    /**
-     * Default constructor
-     * Initializes the tree as a binary tree (K=2 by default).
-     */
-    Tree() : root(nullptr), is_binary_tree(K == 2) {}
-    /**
-     * Destructor
-     */
-    ~Tree()
-    {
-        delete_tree(root);
-    }
-    /**
-     * @brief Helper function to recursively delete nodes in the tree.
-     * @param node The current node to delete.
-     *
-     * This function recursively deletes all children of a node and then deletes the node itself.
-     */
-
-    /**
-     * Add a root node to the tree.
-     **/
-    void add_root(const Node<T> &node)
-    {
-        try
-        {
-            if (root != nullptr)
-            {
-                throw runtime_error("Root node already exists.");
-            }
-            root = new Node<T>(node.get_value());
-        }
-        catch (const invalid_argument &e)
-        {
-            cerr << "Error: " << e.what() << endl;
-        }
     }
 
     typename vector<Node<T> *>::iterator begin_bfs_scan()
@@ -242,7 +249,7 @@ public:
     typename vector<Node<T> *>::iterator begin_pre_order()
     {
         pre_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return begin_dfs_scan();
         }
@@ -253,7 +260,7 @@ public:
     typename vector<Node<T> *>::iterator end_pre_order()
     {
         pre_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return end_dfs_scan();
         }
@@ -277,7 +284,7 @@ public:
     typename vector<Node<T> *>::iterator begin_post_order()
     {
         post_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return begin_dfs_scan();
         }
@@ -288,7 +295,7 @@ public:
     typename vector<Node<T> *>::iterator end_post_order()
     {
         post_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return end_dfs_scan();
         }
@@ -328,7 +335,7 @@ public:
             }
 
             // Check if the parent node has reached the maximum number of children
-            if (parent_ptr->get_num_childern() >= K)
+            if (parent_ptr->get_num_childern() == K)
             {
                 // Throw an exception if the maximum number of children is exceeded
                 throw invalid_argument("Cannot add more children to this node");
@@ -347,7 +354,7 @@ public:
     typename vector<Node<T> *>::iterator begin_in_order()
     {
         in_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return begin_dfs_scan();
         }
@@ -358,7 +365,7 @@ public:
     typename vector<Node<T> *>::iterator end_in_order()
     {
         in_order_nodes.clear();
-        if (!is_binary_tree)
+        if (!binary_tree_bool)
         {
             return end_dfs_scan();
         }
@@ -444,15 +451,9 @@ public:
     }
 
     /**
-     * Get the root node of the tree.
-     */
-    Node<T> *getRoot() const
-    {
-        return root;
-    }
-    /**
      * Draw the tree to an SFML window.
      * @param window The SFML window to draw on.
+     * this part of the code and the function of draw tree and draw nodes mainly from Chat GPT
      */
 
     // cout operator
@@ -529,7 +530,8 @@ public:
     void draw_node(sf::RenderWindow &window, Node<T> *node, sf::Vector2f position, sf::Font &font, const map<Node<T> *, sf::Vector2f> &positions)
     {
         sf::CircleShape circle(NODE_RADIUS);
-        circle.setFillColor(sf::Color::Green);
+
+        circle.setFillColor(sf::Color::Yellow);
         circle.setOrigin(NODE_RADIUS, NODE_RADIUS);
         circle.setPosition(position);
 
@@ -545,7 +547,7 @@ public:
             oss << fixed << setprecision(1) << node->get_value();
             text.setString(oss.str());
         }
-        text.setCharacterSize(25);
+        text.setCharacterSize(15);
         text.setFillColor(sf::Color::Black);
         text.setOrigin(text.getLocalBounds().width / 2, text.getLocalBounds().height / 2);
         text.setPosition(position);

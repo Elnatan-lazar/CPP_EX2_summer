@@ -1,10 +1,10 @@
 {
     "configurations": [
         {
-            "name": "windows-gcc-x86",
+            "name": "windows-gcc-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\SFML-2.6.1\\include",
+                "C:/SFML-2.6.1/include",
                 "C:/Users/elnatan/CPP_EX2_summer"
             ],
             "compilerPath": "C:/MinGW/bin/g++.exe",

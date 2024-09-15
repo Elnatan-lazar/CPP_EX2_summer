@@ -69,7 +69,7 @@ public:
             delete child;
         }
     }
-    // return the list of the childrens
+    // return  childrens
     std::vector<Node<T> *> get_children() const { return children; }
 };
 
