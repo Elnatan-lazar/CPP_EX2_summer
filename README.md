@@ -1,44 +1,92 @@
-This project focuses on generic programming, iterators, and utilizing the STL library.
+# Tree Project
 
-A tree is a connected graph without cycles. In this project, I implemented a container representing a k-ary tree (a k-ary tree is one where each node has at most k children. For example, a binary tree is a 2-ary tree). The tree is generic and can contain keys of any type (e.g., numbers, strings, or classes). By default, the tree is binary (meaning k=2). When creating the container, you can specify the key type and the tree's maximum number of children.
+This project focuses on generic programming, iterators, and the use of the STL library.
 
-the basic class Node conaina a templet of a that conatin value and children. 
+## Overview
 
-The following iterators are implemented in Tree class:
+A tree is a connected graph without cycles. In this project, we implemented a container representing a **k-ary tree** (where each node has at most `k` children). For example, a binary tree is a 2-ary tree. This generic tree can contain keys of any type (numbers, strings, classes). By default, the tree is binary (`k=2`), but the key type and maximum number of children can be specified when creating the container.
 
-Pre-Order Iterator: Traverses the tree in this order: current node -> left subtree -> right subtree. (This iterator operates in this manner only for binary trees; for a general tree, it returns a standard DFS traversal starting from the root.)
+## Implemented Iterators
 
-Post-Order Iterator: Traverses the tree in this order: left subtree -> right subtree -> current node. (This iterator also works this way only for binary trees; for general trees, it performs a standard DFS starting from the root.)
+- **Pre-Order Iterator**: Traverses the tree in this order: `current node -> left subtree -> right subtree`.  
+  - For binary trees only. In a general tree, performs a standard DFS starting from the root.
 
-In-Order Iterator: Traverses in the order of left subtree -> current node -> right subtree. (This traversal is specific to binary trees; for general trees, it returns a standard DFS traversal beginning at the root.)
+- **Post-Order Iterator**: Traverses in this order: `left subtree -> right subtree -> current node`.  
+  - For binary trees only. In a general tree, performs a standard DFS starting from the root.
 
-BFS Iterator: Traverses the tree level by level (left to right). This iterator works for general trees.
+- **In-Order Iterator**: Traverses in the order of `left subtree -> current node -> right subtree`.  
+  - For binary trees only. For general trees, it returns a standard DFS traversal starting from the root.
 
-DFS Iterator: Performs a depth-first search (DFS) on the tree. This iterator is suitable for general trees.
+- **BFS Iterator**: Traverses the tree level by level (left to right). Works for general trees.
 
-Heap Iterator: Converts a binary tree into a min-heap (using the standard algorithm library from the STL).
+- **DFS Iterator**: Performs a depth-first search (DFS) traversal on the tree. Works for general trees.
 
-The Tree class includes the following methods:
+- **Heap Iterator**: Converts a binary tree into a min-heap using the standard algorithm library from the STL.
 
-add_root: Adds a root to the tree. This method accepts a node of any type and places it as the root of the tree.
+## `Tree` Class Methods
 
-add_sub_node: Adds a child to a given parent node. It takes a node within the tree and a new node to create a child for the specified parent.
+- **`add_root`**: Adds the root node to the tree.
+- **`add_sub_node`**: Adds a child to a specified parent node.
+- **`begin_pre_order` / `end_pre_order`**: Returns iterators for traversing the tree in pre-order.
+- **`begin_post_order` / `end_post_order`**: Returns iterators for post-order traversal.
+- **`begin_in_order` / `end_in_order`**: Returns iterators for in-order traversal.
+- **`begin_bfs_scan` / `end_bfs_scan`**: Returns iterators for BFS traversal.
+- **`begin_dfs_scan` / `end_dfs_scan`**: Returns iterators for DFS traversal.
+- **`myHeap`**: Accepts iterators for a binary tree and returns iterators for the resulting heap.
+- **`<< operator`**: Outputs the tree's structure using a GUI, implemented with the SFML library.
 
-begin_pre_order, end_pre_order: Return iterators for traversing the tree in pre-order.
+## Project Classes
 
-begin_post_order, end_post_order: Return iterators for traversing the tree in post-order.
+1. **Node Class**: Represents a "node" in the tree, containing generic data and a vector of children. This is a member field within the `Tree` class.
 
-begin_in_order, `end
+2. **Complex Class**: Represents complex numbers to experiment with non-primitive types in the tree. It includes operator implementations for tree traversal.
+
+3. **Tree Class**: Represents the k-ary tree. Contains all iterator implementations and the output operator.  
+   - Each traversal method has a helper function that updates a vector to store nodes in the required order. The iterators then operate over this vector. The `begin` iterator points to the start of the vector, while `end` points to the end (or `null`).
+
+4. **Test Class**: Contains various test cases for edge scenarios, including:
+   - Adding a large number of nodes beyond tree boundaries.
+   - Adding a child to a non-existent parent.
+   - Handling an empty tree, and more.
+
+5. **Supporting Classes**: Additional classes such as `doctest` and `testCounter` assist the `Test` class.
+
+## Usage Commands
+
+- **`make tree`**: Runs the main program, demonstrating different tree types and traversal methods.
+- **`./test`**: Executes the test suite for the project.
+
+## Example Output
+
+Below is an example of the tree's structure visualized using the GUI:
+
+![gui](https://github.com/user-attachments/assets/44064000-6fdc-4f5d-996e-265e254971ac)
+
+## Memory leak check
+![341111319-16f8fbf0-fce1-4644-b1a6-20b494ac0ebf](https://github.com/user-attachments/assets/90945dbb-6ca0-421c-ba3e-216db1ce116e)
 
 
-commands:
+## Dependencies
 
-Make tree comdand will run the Demo file
-Make test will create the test
-the exe file are in the project so the command ./Demo or ./test will run them.
+- [SFML Library](https://www.sfml-dev.org/): For GUI visualization.
+- Standard Template Library (STL) for container and algorithm functionalities.
 
-Gui
-![gui](https://github.com/user-attachments/assets/635c70a1-ab09-4666-af44-c7cf4d11e991)
+## Getting Started
 
-leak check
-![341111319-16f8fbf0-fce1-4644-b1a6-20b494ac0ebf](https://github.com/user-attachments/assets/8282a882-b44d-4425-b1d3-893ef0568786)
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/tree-project.git
+    ```
+2. Build the project:
+    ```bash
+    make tree
+    ```
+3. Run the test suite:
+    ```bash
+    ./test
+    ```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
