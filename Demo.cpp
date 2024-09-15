@@ -1,4 +1,4 @@
-// mail:randomemail@example.com
+// mail:elnatan100@gmail.com
 #include "Node.hpp"
 #include "Tree.hpp"
 #include "complex.hpp"
